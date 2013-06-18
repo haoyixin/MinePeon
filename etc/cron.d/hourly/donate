@@ -1,0 +1,33 @@
+#!/usr/bin/php
+<?php
+
+include('miner.inc.php');
+include('timezone.inc.php');
+
+$donation = file_get_contents("/opt/minepeon/etc/donation");
+$hour = date('H');
+
+$configfile = "/opt/minepeon/etc/miner.conf";
+$dontatefile = "/opt/minepeon/etc/miner.conf.donate";
+$tempfile = "/opt/minepeon/etc/miner.conf.tmp";
+
+echo $donation . $hour;
+
+if ($donation > 0 and $hour == 00) {
+
+	copy($configfile, $tempfile);
+	copy($dontatefile, $configfile);
+	cgminer("restart", "");
+	sleep(5);
+	copy($tempfile, $configfile);
+	sleep($donation * 60);
+
+	cgminer("restart", "");
+
+}
+
+
+
+// stratum.ozco.in:3333 minepeon.donate	donate
+// stratum.btcguild.com:3333 MinePeon_Donate MinePeon_Donate
+// pool.50btc.com:8332 	Donate
