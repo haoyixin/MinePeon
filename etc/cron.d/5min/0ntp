@@ -1,0 +1,12 @@
+#!/usr/bin/php
+<?php
+
+include('timezone.inc.php');
+
+if (date('Y') < 2013) {
+
+	exec('sudo /usr/bin/ntpd -s');
+
+}
+
+?>
