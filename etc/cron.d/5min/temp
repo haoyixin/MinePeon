@@ -41,6 +41,6 @@ $update = array(
 $ret = rrd_update($RRD, $update);
 
 // echo $result;
-echo $t ."
-". $tz
+//echo $t ."
+//". $tz
 ?>
