@@ -22,7 +22,7 @@ if ($donation > 0 and $hour == 00) {
 	copy($tempfile, $configfile);
 	sleep($donation * 60);
 
-	cgminer("restart", "");
+	cgminer("quit", "");
 
 }
 
