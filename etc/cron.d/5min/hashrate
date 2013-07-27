@@ -1,7 +1,7 @@
 #!/usr/bin/php
 <?php
 
-include('timezone.inc.php');
+include('settings.inc.php');
 
 $metric  = 'hashrate';
 $RRDFILE = $metric . '.rrd';

@@ -2,7 +2,7 @@
 <?php
 
 include('miner.inc.php');
-include('timezone.inc.php');
+include('settings.inc.php');
 
 $donation = file_get_contents("/opt/minepeon/etc/donation");
 $hour = date('H');
