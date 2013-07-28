@@ -1,0 +1,84 @@
+#!/usr/bin/php
+<?php
+
+
+include('miner.inc.php');
+include('settings.inc.php');
+
+require_once "Mail.php"; 
+
+$stats = cgminer("devs", "");
+$devs = $stats['DEVS'];
+
+$devcount = deviceCount($devs);
+
+if ($settings['devicesWarn'] == 0 and $settings['devices'] <> $devcount) {
+
+
+		// Send an email if the devices dont match and set the deviceWarn falt
+		$mailSettings = array(
+				'host' => $settings['smtp']
+			
+				/* ,
+				'auth' => true,
+				'username' => $username,
+				'password' => $password,
+				'port' => '25'
+				*/
+			);
+	
+		$mail = Mail::factory("smtp", $mailSettings );
+
+		$headers = array("From"=>$settings['email'], "Subject"=>"MinePeon Fault: Unexpected device count " . $devcount . " (Expected " . $settings['devices'] . ")");
+		$body = "MinePeon Fault: Unexpected device count " . $devcount . " (Expected " . $settings['devices'] . ")";
+		$mail->send($settings['email'], $headers, $body);
+
+	
+		//  Set the warning flag
+	
+		$settings['devicesWarn'] = 1;
+		writeSettings($settings);
+	
+	
+} 
+
+if($settings['devicesWarn'] == 1 and $settings['devices'] == $devcount) {
+
+		$mailSettings = array(
+				'host' => $settings['smtp']
+			
+				/* ,
+				'auth' => true,
+				'username' => $username,
+				'password' => $password,
+				'port' => '25'
+				*/
+			);
+	
+		$mail = Mail::factory("smtp", $mailSettings );
+
+		$headers = array("From"=>$settings['email'], "Subject"=>"MinePeon Fault: Unexpected device count recovered");
+		$body = "MinePeon Fault: Unexpected device count recovered";
+		$mail->send($settings['email'], $headers, $body);
+	
+	// Clear the warning flag
+	$settings['devicesWarn'] = 0;
+	writeSettings($settings);
+
+}
+
+
+
+function deviceCount($devs) {
+
+	$devices = 0;
+	
+	foreach ($devs as $dev) {
+		if ($dev['MHS5s'] > 0) {
+			$devices++;
+		}
+	}
+
+	return $devices;
+	
+}
