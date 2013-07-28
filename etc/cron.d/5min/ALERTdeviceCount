@@ -27,6 +27,7 @@ if ($settings['devicesWarn'] == 0 and $settings['devices'] <> $devcount) {
 				*/
 			);
 	
+	
 		$mail = Mail::factory("smtp", $mailSettings );
 
 		$headers = array("From"=>$settings['email'], "Subject"=>"MinePeon Fault: " . $settings['deviceName'] . ": Unexpected device count " . $devcount . " (Expected " . $settings['devices'] . ")");
