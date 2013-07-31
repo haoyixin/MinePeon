@@ -4,6 +4,7 @@
 
 include('miner.inc.php');
 include('settings.inc.php');
+include('functions.inc.php');
 
 require_once "Mail.php"; 
 
@@ -16,25 +17,11 @@ if ($settings['devicesWarn'] == 0 and $settings['devices'] <> $devcount) {
 
 
 		// Send an email if the devices dont match and set the deviceWarn falt
-		$mailSettings = array(
-				'host' => $settings['smtp']
-			
-				/* ,
-				'auth' => true,
-				'username' => $username,
-				'password' => $password,
-				'port' => '25'
-				*/
-			);
-	
-	
-		$mail = Mail::factory("smtp", $mailSettings );
+		
+		$message = "MinePeon Fault: " . $settings['deviceName'] . ": Unexpected device count " . $devcount . " (Expected " . $settings['devices'] . ")";
+		
+		sendEmail($settings, $message, $message);
 
-		$headers = array("From"=>$settings['email'], "Subject"=>"MinePeon Fault: " . $settings['deviceName'] . ": Unexpected device count " . $devcount . " (Expected " . $settings['devices'] . ")");
-		$body = "MinePeon Fault: Unexpected device count " . $devcount . " (Expected " . $settings['devices'] . ")";
-		$mail->send($settings['email'], $headers, $body);
-
-	
 		//  Set the warning flag
 	
 		$settings['devicesWarn'] = 1;
@@ -45,23 +32,10 @@ if ($settings['devicesWarn'] == 0 and $settings['devices'] <> $devcount) {
 
 if($settings['devicesWarn'] == 1 and $settings['devices'] == $devcount) {
 
-		$mailSettings = array(
-				'host' => $settings['smtp']
-			
-				/* ,
-				'auth' => true,
-				'username' => $username,
-				'password' => $password,
-				'port' => '25'
-				*/
-			);
-	
-		$mail = Mail::factory("smtp", $mailSettings );
+	$message = "MinePeon Fault: " . $settings['deviceName'] . ": Unexpected device count recovered";
+		
+	sendEmail($settings, $message, $message);
 
-		$headers = array("From"=>$settings['email'], "Subject"=>"MinePeon Fault: " . $settings['deviceName'] . ": Unexpected device count recovered");
-		$body = "MinePeon Fault: Unexpected device count recovered";
-		$mail->send($settings['email'], $headers, $body);
-	
 	// Clear the warning flag
 	$settings['devicesWarn'] = 0;
 	writeSettings($settings);
