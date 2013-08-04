@@ -13,12 +13,12 @@ $devs = $stats['DEVS'];
 
 $devcount = deviceCount($devs);
 
-if ($settings['devicesWarn'] == 0 and $settings['devices'] <> $devcount) {
+if ($settings['devicesWarn'] == 0 and $settings['miningExpDev'] <> $devcount) {
 
 
 		// Send an email if the devices dont match and set the deviceWarn falt
 		
-		$message = "MinePeon Fault: " . $settings['deviceName'] . ": Unexpected device count " . $devcount . " (Expected " . $settings['devices'] . ")";
+		$message = "MinePeon Fault: " . $settings['alertDevice'] . ": Unexpected device count " . $devcount . " (Expected " . $settings['miningExpDev'] . ")";
 		
 		sendEmail($settings, $message, $message);
 
@@ -30,9 +30,9 @@ if ($settings['devicesWarn'] == 0 and $settings['devices'] <> $devcount) {
 	
 } 
 
-if($settings['devicesWarn'] == 1 and $settings['devices'] == $devcount) {
+if($settings['devicesWarn'] == 1 and $settings['miningExpDev'] == $devcount) {
 
-	$message = "MinePeon Fault: " . $settings['deviceName'] . ": Unexpected device count recovered";
+	$message = "MinePeon Fault: " . $settings['alertDevice'] . ": Unexpected device count recovered";
 		
 	sendEmail($settings, $message, $message);
 
