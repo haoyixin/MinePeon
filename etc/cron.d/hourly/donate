@@ -4,25 +4,39 @@
 include('miner.inc.php');
 include('settings.inc.php');
 
-$hour = date('H');
+if(!$settings['donateEnable']){
+	echo "Donation disabled \n";
+	exit;
+}
+if(empty($settings['donateAmount'])){
+	echo "Error: Wrong settings \n";
+	exit;
+}
+if(!empty($settings['donation'])){
+	echo "Warning: Old settings \n";
+}
 
-$configfile = "/opt/minepeon/etc/miner.conf";
-$dontatefile = "/opt/minepeon/etc/miner.conf.donate";
-$tempfile = "/opt/minepeon/etc/miner.conf.tmp";
+echo time()."\n";
 
-echo $donation . $hour;
+if ($settings['donateAmount'] > 0 and date('H') == 00) {
+	$miner = "/opt/minepeon/etc/miner.conf";
+	$donate = "/opt/minepeon/etc/miner.conf.donate";
+	$original = "/opt/minepeon/etc/miner.conf.orig";
+	
+	echo "Start   Amount: ".$settings['donateAmount']."\n";
 
-if ($settings['donation'] > 0 and $hour == 00) {
-
-	copy($configfile, $tempfile);
-	copy($dontatefile, $configfile);
+	// Take your miner info and backup
+	copy($miner, $original);
+	
+	// Restart using donation pools
+	copy($donate, $miner);
 	cgminer("restart", "");
-	sleep(5);
-	copy($tempfile, $configfile);
-	sleep($donation * 60);
-
-	cgminer("quit", "");
-
+	
+	// Switch back to your pools after x minutes
+	sleep($settings['donateAmount'] * 60);
+	copy($original, $miner);
+	cgminer("restart", "");
+	echo "Finish !";
 }
 
 
