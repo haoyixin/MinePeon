@@ -12,11 +12,6 @@ $return = cgminer("summary", "");
 
 $hashrate = $return['SUMMARY'][0]['MHSav'];
 
-echo $hashrate . "  "; 
-echo $settings['miningExpHash'];
-
-echo $settings['miningExpHash'] + $hashrate;
-
 if ($settings['hashWarn'] == 0 and $settings['miningExpHash'] > $hashrate) {
 
 		// Send an email if the devices dont match and set the deviceWarn falt
