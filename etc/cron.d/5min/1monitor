@@ -1,0 +1,58 @@
+#!/usr/bin/php
+<?php
+
+include('miner.inc.php');
+include('settings.inc.php');
+include('functions.inc.php');
+
+if ($settings['devicesWarn'] > 0 or $settings['hashWarn'] > 0 and $settings['miningRecover']) {
+
+	// Increment the alert counter
+	$settings['alertCount'] = $settings['alertCount'] + 1;
+	writeSettings($settings);
+
+} else {
+
+	// reset the alert counter
+	$settings['alertCount'] = 0;
+	writeSettings($settings);
+
+} 
+
+switch ($settings['alertCount']) {
+    case 0:
+        break;
+    case 1:
+		// API quit an OS restart the miner
+		
+		$message = "MinePeon Fault Level " . $settings['alertCount'] . ": " . $settings['alertDevice'] . ": Restarting the Miner";
+		
+		sendEmail($settings, $message, $message);
+		
+        cgminer("quit", "");
+        break;
+    case 2:
+		// OS Kill the miner
+		
+		$message = "MinePeon Fault Level " . $settings['alertCount'] . ": " . $settings['alertDevice'] . ": Killing the Miner";
+		
+		sendEmail($settings, $message, $message);
+		
+        echo exec("killall -9 cgminer");
+		echo exec("killall -9 bfgminer");
+        break;
+    case 3:
+		// Restart the PI
+		
+		$message = "MinePeon Fault Level " . $settings['alertCount'] . ": " . $settings['alertDevice'] . ": Rebooting";
+		
+		sendEmail($settings, $message, $message);
+		
+        echo exec("sudo /usr/bin/reboot");
+        break;
+    default:
+		// Either there is no fault or the Peon has done what it can
+		break;
+}
+
+?>
