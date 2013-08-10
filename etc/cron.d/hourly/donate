@@ -18,7 +18,7 @@ if(!empty($settings['donation'])){
 
 echo time()."\n";
 
-if ($settings['donateAmount'] > 0 and date('H') == 00) {
+if ($settings['donateAmount'] > 0 and date('H') == 12) {
 	$miner = "/opt/minepeon/etc/miner.conf";
 	$donate = "/opt/minepeon/etc/miner.conf.donate";
 	$original = "/opt/minepeon/etc/miner.conf.orig";
