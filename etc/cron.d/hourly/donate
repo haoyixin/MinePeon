@@ -28,12 +28,19 @@ if ($settings['donateAmount'] > 0 and date('H') == 12) {
 	// Take your miner info and backup
 	copy($miner, $original);
 	
+	$settings['donateActive'] = 1;
+	writeSettings($settings);
+	
 	// Restart using donation pools
 	copy($donate, $miner);
 	cgminer("quit", "");
 	
 	// Switch back to your pools after x minutes
 	sleep($settings['donateAmount'] * 60);
+	
+	$settings['donateActive'] = 0;
+	writeSettings($settings);
+	
 	copy($original, $miner);
 	cgminer("quit", "");
 	echo "Finish !";
