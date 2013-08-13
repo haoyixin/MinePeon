@@ -13,7 +13,7 @@ $devs = $stats['DEVS'];
 
 $devcount = deviceCount($devs);
 
-if ($settings['devicesWarn'] == 0 and $settings['miningExpDev'] <> $devcount) {
+if ($settings['devicesWarn'] == 0 and $settings['miningExpDev'] <> $devcount and $settings['donateActive'] == 0) {
 
 
 		// Send an email if the devices dont match and set the deviceWarn falt
