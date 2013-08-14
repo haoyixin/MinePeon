@@ -6,7 +6,6 @@ include('miner.inc.php');
 include('settings.inc.php');
 include('functions.inc.php');
 
-require_once "Mail.php"; 
 
 $stats = cgminer("devs", "");
 $devs = $stats['DEVS'];
